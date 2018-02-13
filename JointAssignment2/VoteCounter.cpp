@@ -36,10 +36,11 @@ void VoteCounter::firstRound()
 }
 void VoteCounter::readResults()
 {
+	vector<int> theVec{ begin(this->inVec), end(this->inVec) };
 	for (unsigned int i = 0; i < this->inVec.size(); i++)
 	{
-		cout << this->CandidatesInElection[i].CandidateName << " of " << this->CandidatesInElection[i].CandidateParty;
-		cout << " currently has a score of: " << this->CandidatesInElection[i].CandidateBallots.size() << endl;
+		cout << this->CandidatesInElection[theVec[i]].CandidateName << " of " << this->CandidatesInElection[theVec[i]].CandidateParty;
+		cout << " currently has a score of: " << this->CandidatesInElection[theVec[i]].CandidateBallots.size() << endl;
 	}
 }
 int VoteCounter::checkWinner()
@@ -84,7 +85,7 @@ void VoteCounter::runnoff(int id)
 	cout << endl << endl;
 	cout << this->CandidatesInElection[id].CandidateName;
 	cout << " has scored the lowest and has been eliminated";
-	cout << " only scoring " << this->CandidatesInElection[id].CandidateBallots.size() << "." << endl;;
+	cout << " only scoring " << this->CandidatesInElection[id].CandidateBallots.size() << "." << endl;
 	cout << endl << endl;
 	this->CandidatesInElection[id].CandidateStatus = false;
 
@@ -92,9 +93,14 @@ void VoteCounter::runnoff(int id)
 	{
 		for (unsigned int j = 0; j < this->CandidatesInElection[id].CandidateBallots[i].preferences.size(); j++)
 		{
-			if (this->CandidatesInElection[id].CandidateBallots[i].preferences[j] == id && j + 1 < CandidatesInElection[id].CandidateBallots[i].preferences.size())
+			int k = 1;
+			if (this->CandidatesInElection[id].CandidateBallots[i].preferences[j] == id && j + k < CandidatesInElection[id].CandidateBallots[i].preferences.size())
 			{
-				this->CandidatesInElection[this->CandidatesInElection[id].CandidateBallots[i].preferences[j + 1]].addBallot(this->CandidatesInElection[id].CandidateBallots[i]);
+				while (j + k < this->CandidatesInElection[id].CandidateBallots[i].preferences.size() && this->CandidatesInElection[this->CandidatesInElection[id].CandidateBallots[i].preferences[j + k]].CandidateStatus != true)
+				{
+					k++;
+				}
+				this->CandidatesInElection[this->CandidatesInElection[id].CandidateBallots[i].preferences[j + k]].addBallot(this->CandidatesInElection[id].CandidateBallots[i]);
 				this->outVec.push_back(id);
 				this->inVec.remove(id);
 			}

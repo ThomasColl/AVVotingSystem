@@ -16,7 +16,6 @@ class VoteCounter
 		int winner;
 
 		void readIn();
-		//void readInBallots();
         void runElection();
         void firstRound();
 		void readResults();
